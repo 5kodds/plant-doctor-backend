@@ -1,0 +1,57 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/plant_doctor/wsgi.py",
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9" // Or python3.10, python3.11, python3.12 - choose one compatible with your Django version and dependencies
+      }
+    }
+    // If you were also deploying your frontend from this SAME vercel.json (monorepo):
+    // {
+    //   "src": "frontend/package.json", // Assuming a build step for frontend, or just point to HTML
+    //   "use": "@vercel/static-build", // Or another builder if you have a JS framework
+    //   "config": { "distDir": "frontend" } // Or your frontend build output folder
+    // }
+  ],
+  "routes": [
+    // If you have static frontend files in the 'frontend' directory you want to serve
+    // This route assumes your HTML/CSS/JS are directly in 'frontend' and don't have a build step
+    // These routes try to serve static files from 'frontend' first.
+    // {
+    //   "src": "/static/(.*)", // Example if you have a static folder inside frontend
+    //   "dest": "/frontend/static/$1"
+    // },
+    // {
+    //   "src": "/(.*\\.(html|css|js|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))",
+    //   "dest": "/frontend/$1"
+    // },
+    // {
+    //   "handle": "filesystem" // Serve static files from the 'Output Directory' of your frontend build
+    // },
+
+    // Route all other API requests starting with /api/ to your Django backend
+    // The (.*) captures everything after /api/
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/plant_doctor/wsgi.py"
+    },
+    // If you want the Django admin to also work:
+    {
+      "src": "/admin/(.*)",
+      "dest": "backend/plant_doctor/wsgi.py"
+    }
+    // If your frontend is a Single Page Application (SPA) and should handle other routes:
+    // {
+    //  "src": "/(.*)",
+    //  "dest": "/frontend/index.html" // Or your main frontend entry point
+    // }
+    // If your Django app should handle all non-API routes (less common for SPA frontends):
+    // {
+    //   "src": "/(.*)",
+    //   "dest": "backend/plant_doctor/wsgi.py"
+    // }
+  ]
+}
