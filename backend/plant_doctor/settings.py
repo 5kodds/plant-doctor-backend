@@ -29,7 +29,7 @@ if not SECRET_KEY:
 # DEBUG mode
 # For Vercel, set DEBUG=False via an environment variable.
 # For local Codespaces dev, if DEBUG is not in .env, it defaults to True here for convenience.
-DEBUG_ENV = os.environ.get('DEBUG', 'True') # Default to 'True' string if not set
+DEBUG_ENV = os.environ.get('DEBUG', 'False') # Default to 'True' string if not set
 DEBUG = DEBUG_ENV.lower() in ('true', '1', 't')
 if DEBUG:
     print("🟡 (settings.py) DEBUG mode is ON.")
