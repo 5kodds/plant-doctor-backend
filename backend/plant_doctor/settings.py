@@ -22,7 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-(%bvleeyg12cb)yqkk3*9$&0)=52s!o41rwk81i0s&a601y*_t"
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+    # Fallback for local development if you don't want to set it as an OS env var locally
+    # BUT for Vercel, it MUST come from Vercel's environment variables.
+    print("🔴 WARNING: DJANGO_SECRET_KEY environment variable not found. Using a default insecure key for local dev ONLY.")
+    SECRET_KEY = 'your_temporary_insecure_development_key_make_sure_this_is_not_used_in_prod'
+    # Ideally, raise an ImproperlyConfigured error if DEBUG is False and SECRET_KEY is not set from env.
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
